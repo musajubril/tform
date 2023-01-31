@@ -8,8 +8,10 @@ import Button from '../components/Button';
 import Link from 'next/link';
 import { FORM_DATA } from '../utils/api_url';
 import axios from "axios"
+import {useToasts} from 'react-toast-notifications';
 
 export default function Page1() {
+  const { addToast } = useToasts()
   const [data, setData] = React.useState(typeof window !== "undefined" && JSON.parse(localStorage.getItem("data")))
     React.useEffect(()=>{
         setData(JSON.parse(localStorage.getItem("data")))
@@ -109,17 +111,13 @@ const handleChange = async(e: React.ChangeEvent<HTMLInputElement>) => {
             await axios.post(FORM_DATA, form)
             .then(res=>{
               console.log(res)
-              // res.json()
+              addToast("Employment Form Submitted Successfully",{
+                appearance: "success",
+        autoDismiss: true,
+              })
+              localStorage.removeItem("data")
+              router.push("/success")
             })
-          //   const res = await fetch(FORM_DATA,
-          // {
-          //   method:'POST',
-          //   body:form
-          // }
-          // )
-          // const file = await res.json()
-          // console.log(file)
-          //  res && file && localStorage.removeItem("data")
             }
     }
     console.log(state)
